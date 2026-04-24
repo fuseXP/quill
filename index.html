@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quill — AI Writing Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+
+  <header>
+    <div class="logo">
+      <span class="logo-icon">✦</span>
+      <span class="logo-text">Quill</span>
+    </div>
+    <p class="tagline">Your personal AI writing companion</p>
+  </header>
+
+  <main>
+
+    <!-- MODE SELECTOR -->
+    <section class="mode-section">
+      <p class="section-label">What do you need?</p>
+      <div class="mode-grid">
+        <button class="mode-btn active" data-mode="improve" onclick="selectMode(this)">
+          <span class="mode-icon">✨</span>
+          <span class="mode-name">Improve</span>
+          <span class="mode-desc">Make writing clearer & stronger</span>
+        </button>
+        <button class="mode-btn" data-mode="summarize" onclick="selectMode(this)">
+          <span class="mode-icon">📋</span>
+          <span class="mode-name">Summarize</span>
+          <span class="mode-desc">Condense into key points</span>
+        </button>
+        <button class="mode-btn" data-mode="formal" onclick="selectMode(this)">
+          <span class="mode-icon">👔</span>
+          <span class="mode-name">Formalize</span>
+          <span class="mode-desc">Professional & polished tone</span>
+        </button>
+        <button class="mode-btn" data-mode="casual" onclick="selectMode(this)">
+          <span class="mode-icon">😊</span>
+          <span class="mode-name">Casualize</span>
+          <span class="mode-desc">Friendly, relaxed tone</span>
+        </button>
+        <button class="mode-btn" data-mode="expand" onclick="selectMode(this)">
+          <span class="mode-icon">📖</span>
+          <span class="mode-name">Expand</span>
+          <span class="mode-desc">Add depth & detail</span>
+        </button>
+        <button class="mode-btn" data-mode="translate" onclick="selectMode(this)">
+          <span class="mode-icon">🌍</span>
+          <span class="mode-name">Translate</span>
+          <span class="mode-desc">Convert to another language</span>
+        </button>
+      </div>
+
+      <!-- translate language picker -->
+      <div class="lang-picker" id="langPicker">
+        <label for="langSelect">Translate to:</label>
+        <select id="langSelect">
+          <option value="Spanish">Spanish</option>
+          <option value="French">French</option>
+          <option value="Hindi">Hindi</option>
+          <option value="Malayalam">Malayalam</option>
+          <option value="German">German</option>
+          <option value="Japanese">Japanese</option>
+          <option value="Arabic">Arabic</option>
+          <option value="Chinese">Chinese (Mandarin)</option>
+          <option value="Portuguese">Portuguese</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- INPUT -->
+    <section class="editor-section">
+      <div class="editor-box">
+        <div class="editor-header">
+          <span class="editor-label">Your text</span>
+          <span class="char-count" id="charCount">0 characters</span>
+        </div>
+        <textarea id="inputText" placeholder="Paste or type your text here…" oninput="updateCharCount()"></textarea>
+        <div class="editor-footer">
+          <button class="clear-btn" onclick="clearAll()">Clear</button>
+          <button class="run-btn" id="runBtn" onclick="runAI()">
+            <span class="btn-text">Run AI ✦</span>
+            <span class="btn-loading" style="display:none">Thinking…</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- OUTPUT -->
+    <section class="output-section" id="outputSection" style="display:none">
+      <div class="output-box">
+        <div class="output-header">
+          <span class="output-label">✦ AI Result</span>
+          <button class="copy-btn" onclick="copyResult()">Copy</button>
+        </div>
+        <div class="output-text" id="outputText"></div>
+      </div>
+    </section>
+
+    <!-- ERROR -->
+    <div class="error-box" id="errorBox" style="display:none">
+      <span id="errorMsg"></span>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>Built with ♥ using <strong>Claude API</strong> · Your first AI project 🚀</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
