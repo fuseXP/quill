@@ -3,12 +3,55 @@
 //  Powered by Hugging Face Inference API
 // ============================================================
 
-const API_KEY = "PASTE_YOUR_HF_TOKEN_HERE";
 const MODEL   = "moonshotai/Kimi-K2-Instruct-0905";
 const API_URL = "https://router.huggingface.co/v1/chat/completions";
 
 let currentMode = "improve";
 
+// ============================================================
+//  TOKEN MANAGEMENT
+//  Saves the user's HF token in browser memory (sessionStorage)
+//  so they only have to type it once per session.
+// ============================================================
+function saveToken() {
+  const token = document.getElementById("tokenInput").value.trim();
+
+  if (!token.startsWith("hf_")) {
+    alert("That doesn't look right — your token should start with hf_");
+    return;
+  }
+
+  // Save token in sessionStorage (cleared when browser tab closes)
+  sessionStorage.setItem("hf_token", token);
+
+  // Show the "token active" banner, hide the input section
+  document.getElementById("tokenSection").style.display = "none";
+  document.getElementById("tokenSaved").style.display = "flex";
+}
+
+function changeToken() {
+  // Remove saved token and show input again
+  sessionStorage.removeItem("hf_token");
+  document.getElementById("tokenSection").style.display = "block";
+  document.getElementById("tokenSaved").style.display = "none";
+  document.getElementById("tokenInput").value = "";
+}
+
+function getToken() {
+  return sessionStorage.getItem("hf_token");
+}
+
+// Check on page load if token already saved this session
+window.addEventListener("load", () => {
+  if (getToken()) {
+    document.getElementById("tokenSection").style.display = "none";
+    document.getElementById("tokenSaved").style.display = "flex";
+  }
+});
+
+// ============================================================
+//  selectMode
+// ============================================================
 function selectMode(clickedBtn) {
   document.querySelectorAll(".mode-btn").forEach(btn => btn.classList.remove("active"));
   clickedBtn.classList.add("active");
@@ -25,6 +68,9 @@ function selectMode(clickedBtn) {
   document.getElementById("errorBox").style.display = "none";
 }
 
+// ============================================================
+//  buildPrompt
+// ============================================================
 function buildPrompt(userText) {
   const lang = document.getElementById("langSelect").value;
 
@@ -40,16 +86,21 @@ function buildPrompt(userText) {
   return prompts[currentMode];
 }
 
+// ============================================================
+//  runAI
+// ============================================================
 async function runAI() {
   const inputText = document.getElementById("inputText").value.trim();
+  const token = getToken();
 
-  if (!inputText) {
-    showError("Please enter some text first!");
+  if (!token) {
+    showError("Please enter your Hugging Face token first!");
+    document.getElementById("tokenSection").scrollIntoView({ behavior: "smooth" });
     return;
   }
 
-  if (API_KEY === "PASTE_YOUR_HF_TOKEN_HERE") {
-    showError("Please add your Hugging Face token inside app.js (line 6). It starts with hf_...");
+  if (!inputText) {
+    showError("Please enter some text first!");
     return;
   }
 
@@ -64,7 +115,7 @@ async function runAI() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${API_KEY}`
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify({
         model: MODEL,
@@ -92,6 +143,9 @@ async function runAI() {
   }
 }
 
+// ============================================================
+//  HELPER FUNCTIONS
+// ============================================================
 function showError(message) {
   const errorBox = document.getElementById("errorBox");
   document.getElementById("errorMsg").textContent = message;
@@ -132,4 +186,3 @@ function clearAll() {
   document.getElementById("charCount").textContent = "0 characters";
   document.getElementById("outputSection").style.display = "none";
   document.getElementById("errorBox").style.display = "none";
-}
