@@ -23,6 +23,29 @@
 
   <main>
 
+    <!-- TOKEN INPUT -->
+    <section class="token-section" id="tokenSection">
+      <div class="token-box">
+        <div class="token-header">
+          <span class="token-icon">🔑</span>
+          <div>
+            <p class="token-title">Enter your Hugging Face token</p>
+            <p class="token-subtitle">Get a free token at <a href="https://huggingface.co/settings/tokens" target="_blank">huggingface.co/settings/tokens</a> — enable "Make calls to Inference Providers"</p>
+          </div>
+        </div>
+        <div class="token-input-row">
+          <input type="password" id="tokenInput" placeholder="hf_xxxxxxxxxxxxxxxxxxxxxxxx" />
+          <button class="token-btn" onclick="saveToken()">Save ✦</button>
+        </div>
+        <p class="token-note">🔒 Your token stays in your browser only — never sent anywhere except Hugging Face.</p>
+      </div>
+    </section>
+
+    <!-- TOKEN SAVED BANNER -->
+    <div class="token-saved" id="tokenSaved" style="display:none">
+      🔑 Token active <button class="token-change" onclick="changeToken()">Change</button>
+    </div>
+
     <!-- MODE SELECTOR -->
     <section class="mode-section">
       <p class="section-label">What do you need?</p>
