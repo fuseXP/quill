@@ -95,6 +95,110 @@ main {
   gap: 28px;
 }
 
+/* ===== TOKEN SECTION ===== */
+.token-section { animation: fadeIn 0.4s ease; }
+
+.token-box {
+  background: rgba(124,111,255,0.07);
+  border: 1px solid rgba(124,111,255,0.25);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.token-header {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.token-icon { font-size: 22px; margin-top: 2px; }
+
+.token-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.token-subtitle {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.token-subtitle a { color: var(--accent2); text-decoration: none; }
+.token-subtitle a:hover { text-decoration: underline; }
+
+.token-input-row {
+  display: flex;
+  gap: 10px;
+}
+
+#tokenInput {
+  flex: 1;
+  background: #1a1a2e;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+#tokenInput:focus { border-color: var(--accent2); }
+#tokenInput::placeholder { color: var(--muted); }
+
+.token-btn {
+  background: linear-gradient(135deg, var(--accent2), #9d8fff);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.token-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(124,111,255,0.4); }
+
+.token-note {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.token-saved {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--success);
+  background: rgba(76,175,125,0.08);
+  border: 1px solid rgba(76,175,125,0.2);
+  border-radius: 10px;
+  padding: 10px 16px;
+  animation: fadeIn 0.3s ease;
+}
+
+.token-change {
+  background: none;
+  border: 1px solid rgba(76,175,125,0.3);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 3px 10px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+  margin-left: auto;
+}
+.token-change:hover { border-color: var(--accent); color: var(--accent); }
+
 /* ===== SECTION LABEL ===== */
 .section-label {
   font-size: 12px;
