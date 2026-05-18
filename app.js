@@ -1,56 +1,14 @@
 // ============================================================
 //  Quill — AI Writing Assistant
-//  Powered by Hugging Face Inference API
+//  Powered by Pollinations AI (free, no token needed!)
 // ============================================================
 
-const MODEL   = "moonshotai/Kimi-K2-Instruct-0905";
-const API_URL = "https://router.huggingface.co/v1/chat/completions";
+const API_URL = "https://text.pollinations.ai/";
 
 let currentMode = "improve";
 
 // ============================================================
-//  TOKEN MANAGEMENT
-//  Saves the user's HF token in browser memory (sessionStorage)
-//  so they only have to type it once per session.
-// ============================================================
-function saveToken() {
-  const token = document.getElementById("tokenInput").value.trim();
-
-  if (!token.startsWith("hf_")) {
-    alert("That doesn't look right — your token should start with hf_");
-    return;
-  }
-
-  // Save token in sessionStorage (cleared when browser tab closes)
-  sessionStorage.setItem("hf_token", token);
-
-  // Show the "token active" banner, hide the input section
-  document.getElementById("tokenSection").style.display = "none";
-  document.getElementById("tokenSaved").style.display = "flex";
-}
-
-function changeToken() {
-  // Remove saved token and show input again
-  sessionStorage.removeItem("hf_token");
-  document.getElementById("tokenSection").style.display = "block";
-  document.getElementById("tokenSaved").style.display = "none";
-  document.getElementById("tokenInput").value = "";
-}
-
-function getToken() {
-  return sessionStorage.getItem("hf_token");
-}
-
-// Check on page load if token already saved this session
-window.addEventListener("load", () => {
-  if (getToken()) {
-    document.getElementById("tokenSection").style.display = "none";
-    document.getElementById("tokenSaved").style.display = "flex";
-  }
-});
-
-// ============================================================
-//  selectMode
+//  selectMode — called when user clicks a mode button
 // ============================================================
 function selectMode(clickedBtn) {
   document.querySelectorAll(".mode-btn").forEach(btn => btn.classList.remove("active"));
@@ -69,7 +27,7 @@ function selectMode(clickedBtn) {
 }
 
 // ============================================================
-//  buildPrompt
+//  buildPrompt — creates instructions for the AI
 // ============================================================
 function buildPrompt(userText) {
   const lang = document.getElementById("langSelect").value;
@@ -87,17 +45,10 @@ function buildPrompt(userText) {
 }
 
 // ============================================================
-//  runAI
+//  runAI — calls Pollinations AI (no token needed!)
 // ============================================================
 async function runAI() {
   const inputText = document.getElementById("inputText").value.trim();
-  const token = getToken();
-
-  if (!token) {
-    showError("Please enter your Hugging Face token first!");
-    document.getElementById("tokenSection").scrollIntoView({ behavior: "smooth" });
-    return;
-  }
 
   if (!inputText) {
     showError("Please enter some text first!");
@@ -111,33 +62,38 @@ async function runAI() {
   const prompt = buildPrompt(inputText);
 
   try {
+    // Pollinations AI — simple POST request, no token needed!
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: MODEL,
-        max_tokens: 1024,
-        messages: [{ role: "user", content: prompt }]
+        messages: [
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        model: "openai",
+        seed: 42,
+        private: true
       })
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error?.message || `API error: ${response.status}`);
+      throw new Error(`API error: ${response.status}`);
     }
 
-    const data = await response.json();
-    const resultText = data.choices[0].message.content;
+    // Pollinations returns plain text directly
+    const resultText = await response.text();
 
     document.getElementById("outputText").textContent = resultText;
     document.getElementById("outputSection").style.display = "block";
     document.getElementById("outputSection").scrollIntoView({ behavior: "smooth", block: "start" });
 
   } catch (error) {
-    showError("Error: " + error.message);
+    showError("Error: " + error.message + ". Please try again!");
   } finally {
     setLoading(false);
   }
@@ -187,3 +143,4 @@ function clearAll() {
   document.getElementById("outputSection").style.display = "none";
   document.getElementById("errorBox").style.display = "none";
 }
+
